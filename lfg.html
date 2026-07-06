@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Light Flip Puzzle</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <h1 class="title">NeuroGrid</h1>
+    <div class="status">Moves <strong id="moves">0</strong></div>
+    <div class="grid" id="grid"></div>
+    <div class="controls">
+      <button onclick="newGame()">Restart</button>
+      <button onclick="getHint()">Hint</button>
+    </div>
+  </main>
+
+  <script src="logic.js"></script>
+</body>
+</html>
