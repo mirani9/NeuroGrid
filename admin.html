@@ -242,11 +242,11 @@
   </div>
 
   <div class="footer">
-    Data via <a href="https://countapi.xyz" target="_blank">CountAPI</a> · namespace <code>mirani9-neurogrid</code>
+    Data via <a href="https://abacus.jasoncameron.dev" target="_blank">Abacus</a> · namespace <code>neurogrid-mirani9</code>
   </div>
 
   <script>
-    const NAMESPACE = "mirani9-neurogrid";
+    const NS = "neurogrid-mirani9";
     let countdown = 30;
     let countdownInterval = null;
 
@@ -266,8 +266,8 @@
     async function fetchStats() {
       try {
         const [vRes, gRes] = await Promise.all([
-          fetch(`https://api.countapi.xyz/get/${NAMESPACE}/visitors`),
-          fetch(`https://api.countapi.xyz/get/${NAMESPACE}/games`),
+          fetch(`https://abacus.jasoncameron.dev/get/${NS}/visitors`),
+          fetch(`https://abacus.jasoncameron.dev/get/${NS}/games`),
         ]);
         const v = await vRes.json();
         const g = await gRes.json();

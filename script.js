@@ -212,8 +212,8 @@ function showWinBanner() {
   document.querySelector(".game-shell").appendChild(banner);
 }
 
-// ─── CountAPI stats ───────────────────────────────────────────────────────────
-const NAMESPACE = "mirani9-neurogrid";
+// ─── Abacus stats (free, no-auth counter API) ────────────────────────────────
+const NS = "neurogrid-mirani9";
 
 function formatCount(n) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
@@ -224,13 +224,13 @@ function formatCount(n) {
 async function refreshStats() {
   try {
     const [vRes, gRes] = await Promise.all([
-      fetch(`https://api.countapi.xyz/get/${NAMESPACE}/visitors`),
-      fetch(`https://api.countapi.xyz/get/${NAMESPACE}/games`),
+      fetch(`https://abacus.jasoncameron.dev/get/${NS}/visitors`),
+      fetch(`https://abacus.jasoncameron.dev/get/${NS}/games`),
     ]);
     const vData = await vRes.json();
     const gData = await gRes.json();
-    if (vData.value !== null) document.getElementById("stat-visitors").textContent = formatCount(vData.value);
-    if (gData.value !== null) document.getElementById("stat-games").textContent   = formatCount(gData.value);
+    if (vData.value != null) document.getElementById("stat-visitors").textContent = formatCount(vData.value);
+    if (gData.value != null) document.getElementById("stat-games").textContent   = formatCount(gData.value);
   } catch (_) { /* silently ignore network errors */ }
 }
 
@@ -238,19 +238,18 @@ async function trackVisitor() {
   if (sessionStorage.getItem("ng_visited")) { refreshStats(); return; }
   sessionStorage.setItem("ng_visited", "1");
   try {
-    const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visitors`);
+    const res = await fetch(`https://abacus.jasoncameron.dev/hit/${NS}/visitors`);
     const data = await res.json();
-    if (data.value !== null) document.getElementById("stat-visitors").textContent = formatCount(data.value);
+    if (data.value != null) document.getElementById("stat-visitors").textContent = formatCount(data.value);
   } catch (_) {}
-  // games count is fetched separately
   refreshStats();
 }
 
 async function trackGame() {
   try {
-    const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/games`);
+    const res = await fetch(`https://abacus.jasoncameron.dev/hit/${NS}/games`);
     const data = await res.json();
-    if (data.value !== null) document.getElementById("stat-games").textContent = formatCount(data.value);
+    if (data.value != null) document.getElementById("stat-games").textContent = formatCount(data.value);
   } catch (_) {}
 }
 
