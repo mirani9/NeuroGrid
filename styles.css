@@ -134,3 +134,109 @@ button:active {
   .game-shell { padding: 22px 16px 18px; }
   .grid { gap: 10px; }
 }
+
+/* ── Stats bar ─────────────────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 18px;
+  background: #f9f9fb;
+  border: 1.5px solid #e4e6ea;
+  border-radius: 14px;
+  padding: 8px 18px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: center;
+}
+
+.stat-icon { font-size: 1rem; line-height: 1; }
+
+.stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 2ch;
+  text-align: right;
+  transition: color 0.3s;
+}
+
+.stat-divider {
+  width: 1.5px;
+  height: 28px;
+  background: #e4e6ea;
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+/* ── Win overlay ───────────────────────────────────────────── */
+#win-banner {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  animation: fadeInBanner 0.3s ease;
+  z-index: 10;
+}
+
+@keyframes fadeInBanner {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.win-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.win-emoji { font-size: 3rem; animation: popIn 0.4s ease; }
+
+@keyframes popIn {
+  0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+  70%  { transform: scale(1.2) rotate(5deg);  opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+}
+
+.win-title { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+
+.win-sub { font-size: 0.95rem; color: var(--muted); }
+
+.win-btn {
+  margin-top: 6px;
+  padding: 10px 28px;
+  border-radius: 999px;
+  border: 2px solid #000;
+  background: #000;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.win-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.game-shell { position: relative; }

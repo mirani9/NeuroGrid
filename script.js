@@ -1,6 +1,7 @@
 const N = 3;
 let grid = [];
 let moves = 0;
+let _firstGame = true; // skip counting the auto-start on page load
 
 function createEmptyGrid() {
   grid = Array.from({ length: N }, () => Array(N).fill(0));
@@ -145,7 +146,7 @@ function checkWin() {
     }
   }
 
-  if (win) setTimeout(() => alert("Puzzle solved!"), 100);
+  if (win) setTimeout(() => showWinBanner(), 120);
 }
 
 function isAllOff(g) {
@@ -190,8 +191,71 @@ function newGame() {
   moves = 0;
   generatePuzzle();
   render();
+  if (!_firstGame) trackGame();
+  _firstGame = false;
 }
 
+// ─── Win banner ──────────────────────────────────────────────────────────────
+function showWinBanner() {
+  const existing = document.getElementById("win-banner");
+  if (existing) existing.remove();
+
+  const banner = document.createElement("div");
+  banner.id = "win-banner";
+  banner.innerHTML = `
+    <div class="win-inner">
+      <div class="win-emoji">🎉</div>
+      <div class="win-title">Puzzle Solved!</div>
+      <div class="win-sub">in <strong>${moves}</strong> move${moves !== 1 ? "s" : ""}</div>
+      <button class="win-btn" onclick="document.getElementById('win-banner').remove(); newGame();">Play Again</button>
+    </div>`;
+  document.querySelector(".game-shell").appendChild(banner);
+}
+
+// ─── CountAPI stats ───────────────────────────────────────────────────────────
+const NAMESPACE = "mirani9-neurogrid";
+
+function formatCount(n) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1_000)     return (n / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
+  return n.toString();
+}
+
+async function refreshStats() {
+  try {
+    const [vRes, gRes] = await Promise.all([
+      fetch(`https://api.countapi.xyz/get/${NAMESPACE}/visitors`),
+      fetch(`https://api.countapi.xyz/get/${NAMESPACE}/games`),
+    ]);
+    const vData = await vRes.json();
+    const gData = await gRes.json();
+    if (vData.value !== null) document.getElementById("stat-visitors").textContent = formatCount(vData.value);
+    if (gData.value !== null) document.getElementById("stat-games").textContent   = formatCount(gData.value);
+  } catch (_) { /* silently ignore network errors */ }
+}
+
+async function trackVisitor() {
+  if (sessionStorage.getItem("ng_visited")) { refreshStats(); return; }
+  sessionStorage.setItem("ng_visited", "1");
+  try {
+    const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visitors`);
+    const data = await res.json();
+    if (data.value !== null) document.getElementById("stat-visitors").textContent = formatCount(data.value);
+  } catch (_) {}
+  // games count is fetched separately
+  refreshStats();
+}
+
+async function trackGame() {
+  try {
+    const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/games`);
+    const data = await res.json();
+    if (data.value !== null) document.getElementById("stat-games").textContent = formatCount(data.value);
+  } catch (_) {}
+}
+
+// ─── App entry point ─────────────────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded", () => {
+  trackVisitor();
   newGame();
 });
