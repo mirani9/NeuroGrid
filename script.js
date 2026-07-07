@@ -6,6 +6,74 @@ function createEmptyGrid() {
   grid = Array.from({ length: N }, () => Array(N).fill(0));
 }
 
+function createMoveMasks() {
+  const masks = [];
+
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      let mask = 0;
+      const dx = [0, -1, 1, 0, 0];
+      const dy = [0, 0, 0, -1, 1];
+
+      for (let d = 0; d < 5; d++) {
+        const nx = i + dx[d];
+        const ny = j + dy[d];
+
+        if (nx >= 0 && ny >= 0 && nx < N && ny < N) {
+          mask |= 1 << (nx * N + ny);
+        }
+      }
+
+      masks.push(mask);
+    }
+  }
+
+  return masks;
+}
+
+const moveMasks = createMoveMasks();
+
+function buildSolutionDistances() {
+  const distances = new Map();
+  const queue = [0];
+
+  distances.set(0, 0);
+
+  while (queue.length > 0) {
+    const state = queue.shift();
+    const distance = distances.get(state);
+
+    for (let i = 0; i < moveMasks.length; i++) {
+      const nextState = state ^ moveMasks[i];
+
+      if (!distances.has(nextState)) {
+        distances.set(nextState, distance + 1);
+        queue.push(nextState);
+      }
+    }
+  }
+
+  return distances;
+}
+
+const solutionDistances = buildSolutionDistances();
+
+function getStateFromGrid(g) {
+  let state = 0;
+
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      if (g[i][j] === 1) state |= 1 << (i * N + j);
+    }
+  }
+
+  return state;
+}
+
+function getShortestSolutionLength(state) {
+  return solutionDistances.get(state) ?? -1;
+}
+
 function flip(x, y, g = grid) {
   const dx = [0, -1, 1, 0, 0];
   const dy = [0, 0, 0, -1, 1];
@@ -21,13 +89,22 @@ function flip(x, y, g = grid) {
 }
 
 function generatePuzzle() {
-  createEmptyGrid();
+  while (true) {
+    const tempGrid = Array.from({ length: N }, () => Array(N).fill(0));
+    const randomMoves = Math.floor(Math.random() * 5) + 8;
 
-  const randomMoves = Math.floor(Math.random() * 6) + 3;
-  for (let k = 0; k < randomMoves; k++) {
-    const x = Math.floor(Math.random() * N);
-    const y = Math.floor(Math.random() * N);
-    flip(x, y);
+    for (let k = 0; k < randomMoves; k++) {
+      const x = Math.floor(Math.random() * N);
+      const y = Math.floor(Math.random() * N);
+      flip(x, y, tempGrid);
+    }
+
+    const state = getStateFromGrid(tempGrid);
+
+    if (getShortestSolutionLength(state) >= 6) {
+      grid = tempGrid;
+      return;
+    }
   }
 }
 
