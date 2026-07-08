@@ -17,7 +17,7 @@
 ## ✨ Features
 
 - **Cross-flip mechanic** - clicking a tile toggles it plus its 4 orthogonal neighbors (classic Lights Out rules).
-- **Guaranteed-solvable generation** — puzzles are built by applying random flips to a solved grid, so a solution always exists.
+- **Guaranteed-solvable generation** - puzzles are built by applying random flips to a solved grid, so a solution always exists.
 - **Backtracking solver** - a recursive search explores flip/no-flip decisions per tile to find a sequence that clears the board, powering the Hint button.
 - **Move counter** — tracks how efficiently you solve each puzzle.
 - **Minimal, responsive UI** with animated lightbulb tiles (Font Awesome icons).
