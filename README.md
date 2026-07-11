@@ -1,4 +1,4 @@
-# 🧩 NeuroGrid — Light Flip Puzzle
+# 🧩 NeuroGrid - A Light Flip Puzzle
 
 **NeuroGrid** is a browser-based "Lights Out" style logic puzzle, where a single tap flips a tile *and* its neighbors — and the goal is to turn every light off. Under the hood, it uses a recursive backtracking algorithm to instantly generate solvable puzzles and reveal the optimal next move on demand.
 
