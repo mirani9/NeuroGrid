@@ -9,7 +9,7 @@
 ## 🎮 How to Play
 
 1. You're shown a 3×3 grid of lights, some on, some off.
-2. Tap any tile — it flips **itself and its up/down/left/right neighbors**.
+2. Tap any tile - it flips **itself and its up/down/left/right neighbors**.
 3. Keep flipping until **every light is off**.
 4. Stuck? Hit **Hint** to get a mathematically verified next move.
 5. Hit **Restart** any time for a fresh, guaranteed-solvable puzzle.
